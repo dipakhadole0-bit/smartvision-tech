@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | Namokar Classes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+
+    <header class="bg-blue-800 text-white py-6 shadow-lg text-center">
+        <h1 class="text-3xl font-bold">Student Learning Portal</h1>
+        <p class="mt-2 text-blue-200">Select your class to access study material</p>
+        <a href="index.html" class="mt-4 inline-block text-sm bg-blue-700 px-4 py-1 rounded hover:bg-blue-600">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Home
+        </a>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-12" id="classGrid">
+            <button onclick="showMaterial('Nursery')" class="bg-white p-6 rounded-xl shadow hover:bg-yellow-400 font-bold transition">Nursery</button>
+            <button onclick="showMaterial('KG')" class="bg-white p-6 rounded-xl shadow hover:bg-yellow-400 font-bold transition">KG/Primary</button>
+            <script>
+                // Loop to create buttons from 1st to 10th
+                for(let i=1; i<=10; i++) {
+                    document.write(`<button onclick="showMaterial('${i}th')" class="bg-white p-6 rounded-xl shadow hover:bg-yellow-400 font-bold transition">${i}th Standard</button>`);
+                }
+            </script>
+        </div>
+
+        <div id="materialSection" class="hidden">
+            <div class="flex justify-between items-center mb-6 border-b-2 border-blue-800 pb-2">
+                <h2 id="selectedClassName" class="text-2xl font-black text-blue-800 uppercase tracking-wide">Class Material</h2>
+                <button onclick="closeMaterial()" class="text-red-500 font-bold">Close <i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4 text-red-600"><i class="fab fa-youtube mr-2"></i> Video Lectures</h3>
+                    <div id="videoList" class="space-y-4">
+                        </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4 text-blue-600"><i class="fas fa-file-pdf mr-2"></i> PDF Notes & Homework</h3>
+                    <div id="pdfList" class="space-y-4">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample Data (Later this will come from Admin Panel/Database)
+        const classData = {
+            "10th": {
+                videos: ["Maths: Algebra Ch 1", "Science: Newton's Law"],
+                pdfs: ["Science Chapter 1 Notes.pdf", "Maths Homework.pdf"]
+            },
+            "9th": {
+                videos: ["English: Grammar Basics"],
+                pdfs: ["English Notes.pdf"]
+            }
+            // Add more classes here...
+        };
+
+        function showMaterial(className) {
+            // Update Title
+            document.getElementById('selectedClassName').innerText = className + " Material";
+            document.getElementById('materialSection').classList.remove('hidden');
+            
+            // Clear previous content
+            const videoList = document.getElementById('videoList');
+            const pdfList = document.getElementById('pdfList');
+            videoList.innerHTML = "";
+            pdfList.innerHTML = "";
+
+            // Check if data exists for this class
+            if (classData[className]) {
+                // Add Videos
+                classData[className].videos.forEach(video => {
+                    videoList.innerHTML += `<div class="p-3 bg-gray-50 border-l-4 border-red-500 flex justify-between">
+                        <span>${video}</span>
+                        <a href="#" class="text-red-600 font-bold">Watch</a>
+                    </div>`;
+                });
+                // Add PDFs
+                classData[className].pdfs.forEach(pdf => {
+                    pdfList.innerHTML += `<div class="p-3 bg-gray-50 border-l-4 border-blue-500 flex justify-between">
+                        <span>${pdf}</span>
+                        <a href="#" class="text-blue-600 font-bold">Download</a>
+                    </div>`;
+                });
+            } else {
+                videoList.innerHTML = "<p class='text-gray-400'>No videos uploaded yet.</p>";
+                pdfList.innerHTML = "<p class='text-gray-400'>No PDFs uploaded yet.</p>";
+            }
+
+            // Scroll to view material
+            window.scrollTo({ top: document.getElementById('materialSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function closeMaterial() {
+            document.getElementById('materialSection').classList.add('hidden');
+        }
+    </script>
+
+</body>
+</html>
